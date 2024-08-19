@@ -1,23 +1,24 @@
 [
   {
-  "rds_name":"launchpadprod",
+  "rds_name":"test_rds_name",
   "rds_instance_type":"mysql",
-  "db_name":"launchpad_backend",
-  "tb_name":"project",
+  "db_name":"test_db_name",
+  "tb_name":"test_tb_name",
   "primaryKey": ["id"],
-  "audit_column": [ "display_name", "pincode", "customer_display_name", "customer_email", "gst_number", "customer_phone"],
-  "date_column":"",
+  "audit_column": [ "display_name", "pincode"],
+  "date_column":"update_ts_dms",
   "comments":"",
   "isHistoricalData":true
-
   },
   {
-    "rds_name":"launchpadprod",
+    "rds_name":"test_rds_name",
     "rds_instance_type":"mysql",
-    "db_name":"boq_backend",
-    "tb_name":"pf_product_item",
+    "db_name":"test_db_name",
+    "tb_name":"test_tb_name",
     "primaryKey": ["id"],
-    "audit_column": ["discount","deleted_at"],
-    "date_column":"updated_at"
-  }
+    "audit_column": [ "display_name", "pincode"],
+    "date_column":"update_ts_dms",
+    "comments":"",
+    "isHistoricalData":true
+    }
 ]
