@@ -8,10 +8,12 @@ class Validate:
 
     def verify_dict(self, dict_value, required_cols, forbidden_audit_cols):
         try:
-            # Check for required keys
+            # Check for required keys and ensure they are not empty or null
             for col in required_cols:
                 if col not in dict_value:
                     raise ValueError(f'Missing required key: {col} in {dict_value}')
+                if dict_value[col] in [None, ""]:
+                    raise ValueError(f'Required key {col} has an empty or null value in {dict_value}')
 
             # Check for forbidden values in audit_column
             if 'audit_column' in dict_value:
