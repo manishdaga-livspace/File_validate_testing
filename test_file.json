@@ -1,1 +1,23 @@
+[
+  {
+  "rds_name":"launchpadprod",
+  "rds_instance_type":"mysql",
+  "db_name":"launchpad_backend",
+  "tb_name":"projects",
+  "primaryKey": ["id"],
+  "audit_column": [ "display_name", "pincode", "customer_display_name", "customer_email", "gst_number", "customer_phone"],
+  "date_column":"updated_at",
+  "comments":"",
+  "isHistoricalData":true
 
+  },
+  {
+    "rds_name":"launchpadprod",
+    "rds_instance_type":"mysql",
+    "db_name":"boq_backend",
+    "tb_name":"pf_product_item",
+    "primaryKey": ["id"],
+    "audit_column": ["discount","deleted_at"],
+    "date_column":"updated_at"
+  }
+]
