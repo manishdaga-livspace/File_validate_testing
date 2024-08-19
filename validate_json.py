@@ -9,14 +9,14 @@ logger = logging.getLogger(__name__)
 def verify_dict(dict_value, required_cols, forbidden_audit_cols):
     missing_keys = [col for col in required_cols if col not in dict_value]
     if missing_keys:
-        error_message = f"Missing required keys: {', '.join(missing_keys)} in {dict_value}"
+        error_message = f"The following required keys are missing: {', '.join(missing_keys)}. Please ensure they are present in the JSON object."
         print(f"Error: {error_message}")
         logger.error(error_message)
         sys.exit(1)
 
     empty_keys = [col for col in required_cols if dict_value.get(col) in [None, ""]]
     if empty_keys:
-        error_message = f"Required keys {', '.join(empty_keys)} have empty or null values in {dict_value}"
+        error_message = f"The following required keys have empty or null values: {', '.join(empty_keys)}. Ensure these keys have valid values."
         print(f"Error: {error_message}")
         logger.error(error_message)
         sys.exit(1)
@@ -24,7 +24,7 @@ def verify_dict(dict_value, required_cols, forbidden_audit_cols):
     if 'audit_column' in dict_value:
         forbidden_in_audit = [col for col in forbidden_audit_cols if col in dict_value['audit_column']]
         if forbidden_in_audit:
-            error_message = f"Unwanted columns {', '.join(forbidden_in_audit)} found in audit_column of {dict_value}"
+            error_message = f"The following forbidden columns are found in 'audit_column': {', '.join(forbidden_in_audit)}. Remove these columns from 'audit_column'."
             print(f"Error: {error_message}")
             logger.error(error_message)
             sys.exit(1)
@@ -42,12 +42,12 @@ def main():
         with open(json_file_path, 'r') as file:
             data = json.load(file)
     except json.JSONDecodeError as e:
-        error_message = f"Failed to decode JSON file. Error: {e}"
+        error_message = f"Failed to decode JSON file. Error: {e}. Please check the JSON syntax and try again."
         print(f"Error: {error_message}")
         logger.error(error_message)
         sys.exit(1)
     except FileNotFoundError as e:
-        error_message = f"File not found. Error: {e}"
+        error_message = f"File not found. Error: {e}. Please ensure the file path is correct."
         print(f"Error: {error_message}")
         logger.error(error_message)
         sys.exit(1)
@@ -64,7 +64,7 @@ def main():
     if isinstance(data, list):
         for item in data:
             if not isinstance(item, dict):
-                error_message = f"List item is not a dictionary: {item}"
+                error_message = f"List item is not a dictionary: {item}. Ensure all items in the list are dictionaries."
                 print(f"Error: {error_message}")
                 logger.error(error_message)
                 sys.exit(1)
@@ -72,7 +72,7 @@ def main():
     elif isinstance(data, dict):
         verify_dict(data, required_columns, forbidden_audit_columns)
     else:
-        error_message = "Invalid JSON structure. Must be a list or dictionary."
+        error_message = "Invalid JSON structure. The top-level JSON must be either a list of dictionaries or a single dictionary."
         print(f"Error: {error_message}")
         logger.error(error_message)
         sys.exit(1)

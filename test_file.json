@@ -3,7 +3,7 @@
   "rds_name":"test_rds_name",
   "rds_instance_type":"mysql",
   "db_name":"test_db_name",
-  "tb_name":"",
+  "tb_name":"test_tb_name",
   "primaryKey": ["id"],
   "audit_column": [ "display_name", "pincode"],
   "date_column":"",
