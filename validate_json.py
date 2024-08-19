@@ -1,67 +1,60 @@
 import json
-import logging
 import sys
 
-class Validate:
-    def __init__(self):
-        self.logger = logging.getLogger(__name__)
+def verify_dict(dict_value, required_cols, forbidden_audit_cols):
+    for col in required_cols:
+        if col not in dict_value:
+            print(f"Error: Missing required key: {col} in {dict_value}")
+            sys.exit(1)
+        if dict_value[col] in [None, ""]:
+            print(f"Error: Required key {col} has an empty or null value in {dict_value}")
+            sys.exit(1)
+    
+    if 'audit_column' in dict_value:
+        for col in forbidden_audit_cols:
+            if col in dict_value['audit_column']:
+                print(f"Error: Unwanted {col} found in audit_column of {dict_value}")
+                sys.exit(1)
+    
+    return True
 
-    def verify_dict(self, dict_value, required_cols, forbidden_audit_cols):
-        try:
-            # Check for required keys and ensure they are not empty or null
-            for col in required_cols:
-                if col not in dict_value:
-                    raise ValueError(f'Missing required key: {col} in {dict_value}')
-                if dict_value[col] in [None, ""]:
-                    raise ValueError(f'Required key {col} has an empty or null value in {dict_value}')
-
-            # Check for forbidden values in audit_column
-            if 'audit_column' in dict_value:
-                for col in forbidden_audit_cols:
-                    if col in dict_value['audit_column']:
-                        raise ValueError(f'Unwanted {col} found in audit_column of {dict_value}')
-
-        except ValueError as e:
-            self.logger.error(e)
-            print(e)
-            sys.exit(1)  # Exit with an error code if validation fails
-        except Exception as e:
-            self.logger.error(e)
-            print(e)
-            sys.exit(1)  # Exit with an error code if there is an exception
-
-        return True
-
-if __name__ == "__main__":
+def main():
     if len(sys.argv) != 2:
         print("Usage: python validate_json.py <path_to_json>")
         sys.exit(1)
-
+    
     json_file_path = sys.argv[1]
-
-    with open(json_file_path, 'r') as file:
-        data = json.load(file)
-
-    # List of required columns
+    
+    try:
+        with open(json_file_path, 'r') as file:
+            data = json.load(file)
+    except json.JSONDecodeError as e:
+        print(f"Error: Failed to decode JSON file. {e}")
+        sys.exit(1)
+    except FileNotFoundError as e:
+        print(f"Error: File not found. {e}")
+        sys.exit(1)
+    
     required_columns = [
         "rds_name", "rds_instance_type", "db_name", 
         "tb_name", "primaryKey", "audit_column", "date_column"
     ]
     
-    # List of forbidden columns in audit_column
     forbidden_audit_columns = [
         "updated_at", "updated_by", "updated_by_id", "updated_ts_dms"
     ]
-
-    validator = Validate()
-
+    
     if isinstance(data, list):
-        # Iterate over each dictionary in the list
         for item in data:
-            validator.verify_dict(item, required_columns, forbidden_audit_columns)
+            if not isinstance(item, dict):
+                print(f"Error: List item is not a dictionary: {item}")
+                sys.exit(1)
+            verify_dict(item, required_columns, forbidden_audit_columns)
     elif isinstance(data, dict):
-        # Handle the case where the top-level JSON is a dictionary
-        validator.verify_dict(data, required_columns, forbidden_audit_columns)
+        verify_dict(data, required_columns, forbidden_audit_columns)
     else:
-        print("Invalid JSON structure: must be a list or dictionary.")
+        print("Error: Invalid JSON structure. Must be a list or dictionary.")
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
