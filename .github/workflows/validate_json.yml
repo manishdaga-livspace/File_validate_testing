@@ -1,7 +1,9 @@
 name: Validate JSON
 
 on:
-  push:
+  pull_request:
+    branches:
+      - main
     paths:
       - '**/*.json'  # Adjust this to match the path of your JSON file(s)
 
@@ -18,8 +20,6 @@ jobs:
       with:
         python-version: '3.x'  # Use the version you need
 
-    - name: Install dependencies
-      run: pip install pyyaml  # In case you need to work with YAML as well
 
     - name: Run validation script
       run: python validate_json.py test_file.json

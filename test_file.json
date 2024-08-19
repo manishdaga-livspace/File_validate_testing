@@ -3,10 +3,10 @@
   "rds_name":"launchpadprod",
   "rds_instance_type":"mysql",
   "db_name":"launchpad_backend",
-  "tb_name":"",
+  "tb_name":"project",
   "primaryKey": ["id"],
   "audit_column": [ "display_name", "pincode", "customer_display_name", "customer_email", "gst_number", "customer_phone"],
-  "date_column":"",
+  "date_column":"updated_at",
   "comments":"",
   "isHistoricalData":true
 
