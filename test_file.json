@@ -8,7 +8,7 @@
   "audit_column": [ "display_name", "pincode", "customer_display_name", "customer_email", "gst_number", "customer_phone"],
   "date_column":"updated_at",
   "comments":"",
-  "isHistoricalData":true
+  "isHistoricalData":false
 
   },
   {
