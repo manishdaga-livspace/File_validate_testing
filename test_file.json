@@ -6,7 +6,7 @@
   "tb_name":"test_tb_name",
   "primaryKey": ["id"],
   "audit_column": [ "display_name", "pincode"],
-  "date_column":"update_ts_dms",
+  "date_column":"",
   "comments":"",
   "isHistoricalData":true
   },
